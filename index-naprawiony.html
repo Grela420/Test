@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SYGNAŁ: ZERO — gra logiczna</title>
+<style>
+:root{--bg:#080d18;--panel:#111a2b;--panel2:#172238;--line:#293852;--text:#edf4ff;--muted:#91a3bf;--cyan:#55e6d0;--blue:#6e9cff;--gold:#ffd166;--red:#ff6b83;--green:#70f0a8}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 20% 0%,#18284a 0,transparent 42%),radial-gradient(ellipse at 100% 80%,#102c38 0,transparent 38%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif}
+button{font:inherit;cursor:pointer}.wrap{max-width:1180px;margin:auto;padding:28px 22px 42px}.top{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:24px}.brand{display:flex;align-items:center;gap:12px}.logo{width:46px;height:46px;border-radius:14px;background:linear-gradient(135deg,var(--cyan),#5787ff);display:grid;place-items:center;color:#06131d;font-size:24px;font-weight:900;box-shadow:0 0 32px #55e6d033}.eyebrow{font-size:11px;letter-spacing:.22em;color:var(--cyan);font-weight:800}.brand h1{font-size:clamp(20px,3vw,29px);letter-spacing:.05em;margin:3px 0 0}.top-tag{border:1px solid var(--line);border-radius:999px;padding:9px 13px;color:var(--muted);font-size:12px;white-space:nowrap}.layout{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(280px,.75fr);gap:20px;align-items:start}.panel{background:linear-gradient(145deg,#121d30ee,#0d1524f5);border:1px solid #283650;border-radius:22px;box-shadow:0 18px 55px #0003;overflow:hidden}.panel-head{padding:20px 22px 15px;border-bottom:1px solid #26334b;display:flex;align-items:center;justify-content:space-between;gap:12px}.panel-head h2{font-size:15px;margin:0;letter-spacing:.04em}.small{font-size:12px;color:var(--muted)}.board-area{padding:20px;position:relative}.board{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;max-width:590px;margin:auto}.tile{position:relative;aspect-ratio:1;border:1px solid #344561;border-radius:13px;background:linear-gradient(145deg,#1b2940,#101a2b);padding:0;display:grid;place-items:center;transition:transform .16s,border-color .16s,background .16s;overflow:hidden;min-width:0}.tile:hover{border-color:#7d9bc9;transform:translateY(-2px)}.tile:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}.tile svg{width:82%;height:82%;overflow:visible}.tile .wire{stroke:#52647e;stroke-width:7;stroke-linecap:round;fill:none;transition:stroke .2s,filter .2s}.tile.powered{background:linear-gradient(145deg,#153d43,#122738);border-color:#3c938e;box-shadow:inset 0 0 18px #55e6d012}.tile.powered .wire{stroke:var(--cyan);filter:drop-shadow(0 0 4px #55e6d0aa)}.tile.endpoint{border-color:#6683b5}.tile.endpoint .core{fill:var(--blue)}.tile.powered.endpoint .core{fill:var(--green)}.tile .core{fill:#7b8da8;stroke:#0d1625;stroke-width:2}.tile .tile-num{position:absolute;right:7px;top:5px;font-size:9px;color:#7487a4;pointer-events:none}.tile.powered .tile-num{color:#9bf8e9}.tile.pulse{animation:pulse .35s ease}.tile.locked{cursor:default}.board-footer{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-top:15px;color:var(--muted);font-size:12px}.legend{display:flex;gap:12px;flex-wrap:wrap}.legend span{display:flex;align-items:center;gap:6px}.dot{width:7px;height:7px;border-radius:50%;background:var(--cyan);box-shadow:0 0 8px currentColor}.dot.off{background:#52647e;box-shadow:none}.side{display:flex;flex-direction:column;gap:16px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:16px}.stat{background:#0b1423;border:1px solid #24334b;border-radius:13px;padding:12px 10px}.stat .label{font-size:10px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}.stat strong{display:block;font-size:23px;margin-top:5px;font-variant-numeric:tabular-nums}.stat strong.cyan{color:var(--cyan)}.mission{padding:19px 20px}.mission-title{display:flex;align-items:center;gap:8px;color:var(--gold);font-size:11px;letter-spacing:.16em;font-weight:800}.mission h3{font-size:20px;margin:10px 0 7px}.mission p{font-size:13px;line-height:1.6;color:#b0bfd4;margin:0}.progress-track{height:5px;background:#25334b;border-radius:99px;margin-top:17px;overflow:hidden}.progress-fill{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--cyan));transition:width .3s}.actions{padding:16px;display:grid;grid-template-columns:1fr 1fr;gap:9px}.btn{border:1px solid #33435f;border-radius:12px;padding:12px 13px;color:var(--text);background:#18253b;font-weight:700;font-size:12px;transition:transform .15s,background .15s}.btn:hover{background:#223450;transform:translateY(-1px)}.btn.primary{grid-column:1/-1;background:linear-gradient(100deg,#56e2ce,#7ab8ff);color:#071622;border:0}.btn.primary:hover{filter:brightness(1.08)}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}.rules{padding:18px 20px}.rules h3{font-size:13px;margin:0 0 12px}.rule{display:flex;gap:10px;margin:11px 0;color:#aebed3;font-size:12px;line-height:1.5}.rule b{color:var(--cyan);font-size:12px;min-width:18px}.toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);background:#17263a;border:1px solid #3b5876;padding:12px 18px;border-radius:12px;box-shadow:0 10px 40px #0008;font-size:13px;opacity:0;pointer-events:none;transition:.25s;z-index:5;max-width:calc(100% - 30px);text-align:center}.toast.show{opacity:1;transform:translate(-50%,0)}.overlay{position:fixed;inset:0;background:#050a12cc;backdrop-filter:blur(8px);display:none;place-items:center;padding:20px;z-index:10}.overlay.show{display:grid}.modal{width:min(440px,100%);background:#111d30;border:1px solid #3a536f;border-radius:22px;padding:28px;text-align:center;box-shadow:0 25px 80px #0009;animation:pop .3s ease}.modal .symbol{font-size:44px}.modal h2{margin:10px 0 8px;font-size:27px}.modal p{color:#aebed3;line-height:1.6;font-size:14px}.modal .btn{margin-top:10px;width:100%}.keyboard{font-size:11px;color:var(--muted);text-align:center;margin-top:10px}.kbd{display:inline-block;padding:2px 6px;border:1px solid #43536b;border-radius:5px;color:#dce8fa;margin:0 2px}
+@keyframes pulse{50%{transform:scale(.94);filter:brightness(1.35)}}@keyframes pop{from{transform:scale(.93);opacity:0}to{transform:scale(1);opacity:1}}@media(max-width:800px){.layout{grid-template-columns:1fr}.side{display:grid;grid-template-columns:1fr 1fr}.stats,.actions{grid-column:1/-1}.top-tag{display:none}}@media(max-width:480px){.wrap{padding:16px 12px 30px}.board-area{padding:12px}.board{gap:5px}.tile{border-radius:9px}.side{display:flex}.panel-head{padding:16px}.stat strong{font-size:20px}.board-footer{font-size:10px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><div class="logo">⌁</div><div><div class="eyebrow">LABORATORIUM LOGIKI / 07</div><h1>SYGNAŁ: ZERO</h1></div></div>
+    <div class="top-tag">◈ TRYB ANALITYCZNY <span style="color:var(--cyan)">● ONLINE</span></div>
+  </header>
+  <main class="layout">
+    <section class="panel">
+      <div class="panel-head"><h2>▦ SIATKA PRZEKAŹNIKÓW</h2><span class="small" id="levelLabel">POZIOM 01 / 08</span></div>
+      <div class="board-area">
+        <div class="board" id="board" aria-label="Plansza logiczna"></div>
+        <div class="board-footer"><div class="legend"><span><i class="dot"></i> Aktywny sygnał</span><span><i class="dot off"></i> Brak sygnału</span></div><span id="movesLabel">RUCHY: 0</span></div>
+      </div>
+    </section>
+    <aside class="side">
+      <section class="panel">
+        <div class="stats">
+          <div class="stat"><div class="label">Punkty</div><strong class="cyan" id="score">0000</strong></div>
+          <div class="stat"><div class="label">Ruchy</div><strong id="moves">0</strong></div>
+          <div class="stat"><div class="label">Rekord</div><strong id="best">0</strong></div>
+        </div>
+        <div class="mission">
+          <div class="mission-title">✦ AKTUALNA MISJA</div>
+          <h3 id="missionTitle">Przywróć połączenie</h3>
+          <p id="missionText">Obróć przekaźniki, aby poprowadzić sygnał ze źródła do odbiornika. Każdy ruch ma znaczenie.</p>
+          <div class="progress-track"><div class="progress-fill" id="progress"></div></div>
+        </div>
+        <div class="actions">
+          <button class="btn primary" id="checkBtn">SPRAWDŹ POŁĄCZENIE ↗</button>
+          <button class="btn" id="hintBtn">⌁ Podpowiedź</button>
+          <button class="btn" id="resetBtn">↺ Reset poziomu</button>
+        </div>
+      </section>
+      <section class="panel rules">
+        <h3>JAK GRAĆ</h3>
+        <div class="rule"><b>01</b><span>Kliknij kafelek, aby obrócić go o <strong>90°</strong> zgodnie z ruchem wskazówek zegara.</span></div>
+        <div class="rule"><b>02</b><span>Połącz <strong>źródło S</strong> (lewy górny róg) z <strong>odbiornikiem R</strong> (prawy dolny róg).</span></div>
+        <div class="rule"><b>03</b><span>Sygnał płynie tylko między stykającymi się końcówkami przewodów. Obserwuj podświetlenie.</span></div>
+        <div class="rule"><b>04</b><span>Zdobywaj punkty za małą liczbę ruchów i niewykorzystane podpowiedzi. Kolejne poziomy są trudniejsze.</span></div>
+      </section>
+    </aside>
+  </main>
+  <div class="keyboard">WSKAZÓWKA: <span class="kbd">klik</span> obraca · <span class="kbd">?</span> podpowiada · najpierw analizuj, potem działaj</div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+<div class="overlay" id="overlay"><div class="modal"><div class="symbol" id="modalSymbol">⚡</div><h2 id="modalTitle">Sygnał przywrócony!</h2><p id="modalText"></p><button class="btn primary" id="nextBtn">NASTĘPNY POZIOM →</button></div></div>
+<script>
+(() => {
+'use strict';
+const N=5, DIRS=[{x:0,y:-1,b:1},{x:1,y:0,b:2},{x:0,y:1,b:4},{x:-1,y:0,b:8}];
+const boardEl=document.getElementById('board');
+let level=1,moves=0,score=0,hints=0,tiles=[],initial=[],powered=new Set(),solved=false,toastTimer;
+let best=0;
+try { best=Number(localStorage.getItem('sygnalZeroBest')||0); } catch (_) { best=0; }
+const $=id=>document.getElementById(id);
+$('best').textContent=best;
+const names=['Pierwszy impuls','Martwa strefa','Przeciążenie','Układ lustrzany','Węzeł widmo','Labirynt impulsów','Kaskada','Sygnał: zero'];
+function rotateMask(mask){return ((mask<<1)&15)|((mask&8)?1:0)}
+function has(mask,bit){return (mask&bit)!==0}
+function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+function pathSearch(){
+ const start=0,end=N*N-1,visited=new Set([start]),path=[start],limit=level<3?Math.random()*2+2:Math.random()*4+4;
+ function dfs(pos){
+  if(pos===end)return true;
+  if(path.length>N*N-1)return false;
+  let x=pos%N,y=Math.floor(pos/N);
+  let opts=shuffle(DIRS
+   .map(d=>({x:x+d.x,y:y+d.y,d}))
+   .filter(o=>o.x>=0&&o.x<N&&o.y>=0&&o.y<N)
+   .map(o=>({p:o.y*N+o.x,d:o.d}))
+   .filter(o=>!visited.has(o.p)));
+  // Prefer a varied but reasonably direct route to the receiver.
+  opts.sort((a,b)=>((Math.abs(a.p%N-(N-1))+Math.abs(Math.floor(a.p/N)-(N-1)))+(Math.random()-.5)*limit)-((Math.abs(b.p%N-(N-1))+Math.abs(Math.floor(b.p/N)-(N-1)))+(Math.random()-.5)*limit));
+  for(const o of opts){visited.add(o.p);path.push(o.p);if(dfs(o.p))return true;path.pop();visited.delete(o.p)}
+  return false;
+ }
+ dfs(start);return path;
+}
+function buildLevel(){
+ solved=false;moves=0;hints=0;
+ const path=pathSearch(), masks=Array(N*N).fill(0);
+ for(let i=0;i<path.length;i++){
+  const p=path[i],x=p%N,y=Math.floor(p/N);
+  for(const q of [path[i-1],path[i+1]])if(q!==undefined){
+   const qx=q%N,qy=Math.floor(q/N);
+   if(qx===x&&qy===y-1)masks[p]|=1;
+   if(qx===x+1&&qy===y)masks[p]|=2;
+   if(qx===x&&qy===y+1)masks[p]|=4;
+   if(qx===x-1&&qy===y)masks[p]|=8;
+  }
+ }
+ // Distractor tiles receive one or two plausible contacts, not empty squares.
+ for(let i=0;i<masks.length;i++)if(!masks[i]){
+  const opts=[1,2,4,8,3,6,12,9];masks[i]=opts[Math.floor(Math.random()*opts.length)];
+ }
+ tiles=masks.map((mask,i)=>({mask,rot:0,base:mask,start:i===0,end:i===N*N-1}));
+ // Scramble every tile with a random rotation. At least one tile is guaranteed to move.
+ tiles.forEach(t=>{t.rot=Math.floor(Math.random()*4);t.mask=rotateTimes(t.base,t.rot)});
+ if(tiles.every(t=>t.rot===0)) {tiles[1].rot=1;tiles[1].mask=rotateMask(tiles[1].base)}
+ initial=tiles.map(t=>({...t}));
+ $('levelLabel').textContent=`POZIOM ${String(level).padStart(2,'0')} / 08`;
+ $('missionTitle').textContent=names[level-1]||'Ostatni impuls';
+ $('missionText').textContent=`Połącz źródło S z odbiornikiem R. Siatka ${N}×${N}; poziom trudności ${level<=2?'rozgrzewka':level<=5?'średni':'ekspercki'}.`;
+ $('progress').style.width=((level-1)/8*100)+'%';
+ calculatePower();render();updateStats();
+}
+function rotateTimes(mask,n){while(n--)mask=rotateMask(mask);return mask}
+function svgFor(mask,start,end){
+ const lines=[];const cx=50,cy=50;
+ for(const d of DIRS)if(has(mask,d.b)){
+  let x2=cx+d.x*37,y2=cy+d.y*37;lines.push(`<path class="wire" d="M ${cx} ${cy} L ${x2} ${y2}"/>`);
+ }
+ let label=start?'S':end?'R':'';
+ return `<svg viewBox="0 0 100 100" aria-hidden="true">${lines.join('')}<circle class="core" cx="50" cy="50" r="8"/>${label?`<text x="50" y="18" text-anchor="middle" fill="${start?'#7aa7ff':'#70f0a8'}" font-size="13" font-weight="900">${label}</text>`:''}</svg>`;
+}
+function render(){
+ boardEl.innerHTML='';
+ tiles.forEach((t,i)=>{
+  const b=document.createElement('button');b.className='tile'+(powered.has(i)?' powered':'')+((t.start||t.end)?' endpoint':'')+(solved?' locked':'');
+  b.type='button';b.setAttribute('aria-label',`Kafelek ${Math.floor(i/N)+1}, ${i%N+1}. Obróć przewody`);
+  b.innerHTML=svgFor(t.mask,t.start,t.end)+`<span class="tile-num">${String(i+1).padStart(2,'0')}</span>`;
+  b.addEventListener('click',()=>turnTile(i));boardEl.appendChild(b);
+ });
+}
+function calculatePower(){
+ powered=new Set([0]);let queue=[0];
+ while(queue.length){
+  const i=queue.shift(),x=i%N,y=Math.floor(i/N),mask=tiles[i].mask;
+  for(const d of DIRS){
+   if(!has(mask,d.b))continue;
+   const nx=x+d.x,ny=y+d.y;if(nx<0||nx>=N||ny<0||ny>=N)continue;
+   const j=ny*N+nx,opposite=({1:4,2:8,4:1,8:2})[d.b];
+   if(has(tiles[j].mask,opposite)&&!powered.has(j)){powered.add(j);queue.push(j)}
+  }
+ }
+}
+function turnTile(i){
+ if(solved)return;
+ tiles[i].rot=(tiles[i].rot+1)%4;tiles[i].mask=rotateMask(tiles[i].mask);moves++;
+ calculatePower();render();updateStats();
+ const el=boardEl.children[i];if(el){el.classList.add('pulse');setTimeout(()=>el.classList.remove('pulse'),350)}
+ if(powered.has(N*N-1))showToast('Odbiornik otrzymuje sygnał! Sprawdź połączenie.');
+}
+function updateStats(){
+ $('moves').textContent=moves;$('movesLabel').textContent='RUCHY: '+moves;
+ $('score').textContent=String(score).padStart(4,'0');
+}
+function showToast(msg){const el=$('toast');el.textContent=msg;el.classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('show'),2300)}
+function check(){
+ if(solved)return;
+ calculatePower();render();
+ if(powered.has(N*N-1)){
+  solved=true;const bonus=Math.max(100,600-(moves*15)-(hints*100))+(level*75);score+=bonus;
+  if(score>best){best=score;try { localStorage.setItem('sygnalZeroBest',String(best)); } catch (_) {} $('best').textContent=best}
+  updateStats();$('progress').style.width=(level/8*100)+'%';
+  $('modalSymbol').textContent='⚡';$('modalTitle').textContent='Sygnał przywrócony!';
+  $('modalText').textContent=`Połączenie działa. Wykonano ${moves} ruchów. Premia za ten poziom: +${bonus} pkt.${hints?' Podpowiedzi obniżyły premię.':''}`;
+  $('nextBtn').textContent=level>=8?'ZAGRAJ PONOWNIE ↻':'NASTĘPNY POZIOM →';$('overlay').classList.add('show');
+ }else showToast('Brak pełnego połączenia. Sprawdź styki między kafelkami.');
+}
+function hint(){
+ if(solved)return;
+ // Find a tile whose rotation moves it toward the original solved orientation.
+ let candidates=[];
+ tiles.forEach((t,i)=>{if(t.mask!==t.base){let cw=rotateMask(t.mask),ccw=rotateTimes(t.mask,3);let dcw=bitDistance(cw,t.base),dccw=bitDistance(ccw,t.base);candidates.push({i,dir:dcw<=dccw?1:-1,dist:Math.min(dcw,dccw)})}});
+ if(!candidates.length){showToast('Wszystkie przewody są już w prawidłowej orientacji.');return}
+ candidates.sort((a,b)=>a.dist-b.dist);const pick=candidates[Math.floor(Math.random()*Math.min(3,candidates.length))];
+ hints++;tiles[pick.i].rot=(tiles[pick.i].rot+pick.dir+4)%4;tiles[pick.i].mask=rotateTimes(tiles[pick.i].mask,pick.dir===1?1:3);
+ moves++;calculatePower();render();updateStats();showToast('Podpowiedź: obrócono kafelek '+(pick.i+1)+'. Analizuj nowe podświetlenie.');
+}
+function bitDistance(a,b){let n=0;for(let bit of [1,2,4,8])if(has(a,bit)!==has(b,bit))n++;return n}
+function reset(){tiles=initial.map(t=>({...t}));moves=0;hints=0;solved=false;calculatePower();render();updateStats();showToast('Poziom przywrócony. Zacznij od nowa.')}
+$('checkBtn').addEventListener('click',check);$('hintBtn').addEventListener('click',hint);$('resetBtn').addEventListener('click',reset);
+$('nextBtn').addEventListener('click',()=>{$('overlay').classList.remove('show');if(level>=8){level=1;score=0}else level++;buildLevel()});
+document.addEventListener('keydown',e=>{if(e.key==='?'||e.key==='/')hint();if(e.key==='Enter')check();if(e.key==='Escape')$('overlay').classList.remove('show')});
+buildLevel();
+})();
+</script>
+</body>
+</html>
